@@ -14,6 +14,7 @@ public class Orden {
 	private String numero;
 	private Date fechaCreacion;
 	private Date fechaRecibida;
+	private double total;
 	
 	@ManyToOne
 	private Usuario usuario;
@@ -80,11 +81,19 @@ public class Orden {
 		this.detalle = detalle;
 	}
 
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
+	}
+
 	@Override
 	public String toString() {
 		return "Orden [id=" + id + ", numero=" + numero + ", fechaCreacion=" + fechaCreacion + ", fechaRecibida="
-				+ fechaRecibida + "]";
+				+ fechaRecibida + ", total=" + total + ", usuario=" + usuario + ", detalle=" + detalle + "]";
 	}
-	
+
 	
 }
