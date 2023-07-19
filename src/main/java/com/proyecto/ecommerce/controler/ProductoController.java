@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.proyecto.ecommerce.model.Producto;
 import com.proyecto.ecommerce.model.Usuario;
-import com.proyecto.ecommerce.service.ProductoService;
+import com.proyecto.ecommerce.service.IProductoService;
 import com.proyecto.ecommerce.service.UploadFileService;
 
 
@@ -30,7 +30,7 @@ public class ProductoController {
 	private UploadFileService upload;
 	
 	@Autowired
-	private ProductoService productoService;
+	private IProductoService productoService;
 	
 
 	@GetMapping("")

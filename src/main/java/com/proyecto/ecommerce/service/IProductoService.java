@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.proyecto.ecommerce.model.Producto;
 
-public interface ProductoService {
+public interface IProductoService {
 
 	public Producto guardar(Producto producto);
 	
