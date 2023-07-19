@@ -6,5 +6,5 @@ import com.proyecto.ecommerce.model.Usuario;
 
 public interface IUsuarioService {
 
-	Optional<Usuario> buscarPorId (Integer id);
+	Optional<Usuario> findById (Integer id);
 }

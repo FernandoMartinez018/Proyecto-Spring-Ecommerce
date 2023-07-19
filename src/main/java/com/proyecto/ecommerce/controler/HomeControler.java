@@ -1,11 +1,12 @@
 package com.proyecto.ecommerce.controler;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,8 @@ import com.proyecto.ecommerce.model.DetalleOrden;
 import com.proyecto.ecommerce.model.Orden;
 import com.proyecto.ecommerce.model.Producto;
 import com.proyecto.ecommerce.model.Usuario;
+import com.proyecto.ecommerce.service.IDetalleOrdenService;
+import com.proyecto.ecommerce.service.IOrdenService;
 import com.proyecto.ecommerce.service.IProductoService;
 import com.proyecto.ecommerce.service.IUsuarioService;
 
@@ -27,17 +30,25 @@ import com.proyecto.ecommerce.service.IUsuarioService;
 @RequestMapping("/")
 public class HomeControler {
 	
-	private final org.slf4j.Logger  log= LoggerFactory.getLogger(HomeControler.class);
-	//almacenamiento de la orden
-	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
-	//datos de la orden
-	Orden orden = new Orden();
+	private final Logger  log= LoggerFactory.getLogger(HomeControler.class);
+	
+	@Autowired
+	private IProductoService productoService;
 	
 	@Autowired
 	private IUsuarioService usuarioService;
 	
 	@Autowired
-	private IProductoService productoService;
+	private IOrdenService ordenService;
+	
+	@Autowired
+	private IDetalleOrdenService detalleOrdenService;
+	
+	//almacenamiento de la orden
+	List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
+	
+	//datos de la orden
+	Orden orden = new Orden();
 	
 	@GetMapping("")
 	public String Home(Model model) {
@@ -120,12 +131,37 @@ public class HomeControler {
 	
 	@GetMapping("/order")
 	public String orden(Model model) {
-		Usuario usuario = usuarioService.buscarPorId(1).get();
+		Usuario usuario = usuarioService.findById(1).get();
 		
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
 		model.addAttribute("usuario", usuario);
 		
 		return "usuario/resumenorden";
+	}
+	
+	@GetMapping("/saveorder")
+	public String saveOrder() {
+		Date fechaCreacion = new Date();
+		orden.setFechaCreacion(fechaCreacion);
+		orden.setNumero(ordenService.generarNumeroOrden());
+		
+		//usuario
+		Usuario usuario = usuarioService.findById(1).get();
+		
+		orden.setUsuario(usuario);
+		ordenService.guardar(orden);
+		
+		//guardar detalles
+		for (DetalleOrden dt:detalles) {
+			dt.setOrden(orden);
+			detalleOrdenService.guardar(dt);
+		}
+
+		///limpiar lista y orden
+		orden = new Orden();
+		detalles.clear();
+
+		return "redirect:/";
 	}
 }
