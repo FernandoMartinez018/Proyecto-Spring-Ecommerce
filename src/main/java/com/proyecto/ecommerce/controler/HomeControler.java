@@ -27,6 +27,8 @@ import com.proyecto.ecommerce.service.IOrdenService;
 import com.proyecto.ecommerce.service.IProductoService;
 import com.proyecto.ecommerce.service.IUsuarioService;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 @RequestMapping("/")
@@ -53,8 +55,13 @@ public class HomeControler {
 	Orden orden = new Orden();
 	
 	@GetMapping("")
-	public String Home(Model model) {
+	public String Home(Model model, HttpSession session) {
 		model.addAttribute("productos", productoService.mostrar());
+		log.info("Session usuario: {}",session.getAttribute("idusuario"));
+		
+
+		//session
+		model.addAttribute("sesion", session.getAttribute("idusuario"));
 		return "usuario/home";
 	}
 	
@@ -124,16 +131,21 @@ public class HomeControler {
 		return "usuario/carrito";
 	}
 	
-	@GetMapping("/getcart")
-	public String compraCarrito(Model model) {
+	@GetMapping("/getCart")
+	public String getCart(Model model, HttpSession session) {
+
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
+
+		//sesion
+		model.addAttribute("sesion", session.getAttribute("idusuario"));
 		return "/usuario/carrito";
 	}
 	
 	@GetMapping("/order")
-	public String orden(Model model) {
-		Usuario usuario = usuarioService.findById(1).get();
+	public String orden(Model model, HttpSession session) {
+		
+		Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
@@ -143,13 +155,13 @@ public class HomeControler {
 	}
 	
 	@GetMapping("/saveorder")
-	public String saveOrder() {
+	public String saveOrder(HttpSession session) {
 		Date fechaCreacion = new Date();
 		orden.setFechaCreacion(fechaCreacion);
 		orden.setNumero(ordenService.generarNumeroOrden());
 		
 		//usuario
-		Usuario usuario = usuarioService.findById(1).get();
+		Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		
 		orden.setUsuario(usuario);
 		ordenService.guardar(orden);
