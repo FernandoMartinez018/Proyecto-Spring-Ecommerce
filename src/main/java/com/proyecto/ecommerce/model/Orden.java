@@ -1,6 +1,7 @@
 package com.proyecto.ecommerce.model;
 
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -19,8 +20,8 @@ public class Orden {
 	@ManyToOne
 	private Usuario usuario;
 	
-	@OneToOne(mappedBy = "orden")
-	private DetalleOrden detalle;
+	@OneToMany(mappedBy = "orden")
+	private List<DetalleOrden> detalle;
 	
 	public Orden() {
 		
@@ -73,20 +74,21 @@ public class Orden {
 		this.usuario = usuario;
 	}
 
-	public DetalleOrden getDetalle() {
-		return detalle;
-	}
-
-	public void setDetalle(DetalleOrden detalle) {
-		this.detalle = detalle;
-	}
-
 	public double getTotal() {
 		return total;
 	}
 
 	public void setTotal(double total) {
 		this.total = total;
+	}
+	
+
+	public List<DetalleOrden> getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(List<DetalleOrden> detalle) {
+		this.detalle = detalle;
 	}
 
 	@Override

@@ -176,7 +176,7 @@ public class HomeControler {
 		orden = new Orden();
 		detalles.clear();
 
-		return "redirect:/";
+		return "/usuario/home";
 	}
 	
 	@PostMapping("/search")
