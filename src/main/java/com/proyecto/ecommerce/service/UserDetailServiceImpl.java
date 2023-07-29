@@ -1,4 +1,4 @@
-/*package com.proyecto.ecommerce.service;
+package com.proyecto.ecommerce.service;
 
 import java.util.Optional;
 
@@ -44,4 +44,4 @@ public class UserDetailServiceImpl implements UserDetailsService{
 		}
 	}
 
-}*/
+}
